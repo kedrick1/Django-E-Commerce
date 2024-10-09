@@ -25,28 +25,21 @@
 
             <h3> Account Deletion </h3>
 
-            <br>
+            <hr>
+
+            <p> Are you sure you want to delete your account? </p>
+
             <br>
 
             <form method="POST" autocomplete="off">
 
                 {% csrf_token %}
 
-                <!--{{form}} or {{form.email}}-->
-                <!--django crispy form helps with visual-->
 
-                {{user_form.username|as_crispy_field}}
-
-                <p> Are you sure you want to delete your account? </p>
-
-                <br> <br>
-
-                <button type="submit" class="btn btn-danger btn-lg w-100 btn-block p-2"> &nbsp; Delete your account </button>
+                <button type="submit" class="btn btn-danger navbar-btn text-white"> &nbsp; Delete </button>
 
 
             </form>
-
-
 
         </div>
 
