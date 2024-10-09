@@ -25,7 +25,7 @@
 
             <h3> Update your account </h3>
 
-            <br>
+            <hr>
             <br>
 
             <form method="POST" autocomplete="off">
@@ -42,7 +42,7 @@
                 {{user_form.email|as_crispy_field}}
 
                 <br> <br>
-                <button type="submit" class="btn btn-secondary btn-lg w-100 btn-block p-2"> &nbsp; Update your account </button>
+                <button type="submit" class="btn btn-primary navbar-btn text-white"> &nbsp; Update your account </button>
 
 
             </form>
@@ -59,9 +59,8 @@
             <hr>
 
             <p> Proceed if you wish to delete your account? </p>
-            <br>
-            <br>
-
+            
+    
             <a class="btn btn-primary navbar-btn text-white" type="button"  href="{% url 'delete-account' %}"> Delete your account </a>
 
 
