@@ -1,0 +1,45 @@
+<!-- if work when click on link-->
+
+<!-- see once we have submitted form/register user-->
+<!-- an email verification was sent to your email-->
+
+{% include "store/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+
+    body{
+        background-color: gray;
+    }
+
+</style>
+
+<body>
+
+    <br>  <!--this make it that form is not touching home bar-->
+
+    <div class="container bg-white shadow-md p-5 form-layout" >
+
+        <div class="text-center">
+            <i class="fa fa-check fa-3x text-success" aria-hidden="true"></i>
+        
+    
+            <br> <br>
+
+            <h5> <strong> Your Account is now active! </strong> </h5>
+
+            <hr>
+
+            <p> Please proceed to login. </p>
+
+        
+        </div>
+
+    </div>
+
+</body>
+
+{% endblock %}

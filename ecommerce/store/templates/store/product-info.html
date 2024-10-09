@@ -1,0 +1,138 @@
+
+{% extends "./base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+
+    <main class="pt-5">
+
+        <div class="row g-3">
+
+            <div class="col-md-5 col-lg-5 order-md-first bg-light">
+            
+                <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{product.image.url}}"> <!-- Product image -->
+            
+            </div>
+
+            <div class="col-md-7 col-lg-7 ps-md-3 ps-lg-5">
+
+                <h1 class="mb-0 h4"> {{product.title}}  </h1>
+
+                <strong> {{product.brand}} </strong>
+
+
+                <hr>
+
+                <br>
+
+
+                <p> {{product.description}} </p>
+
+                <div class="border">
+
+                    <div class="col border-bottom">
+
+                        <div class="row p-3">
+
+                            <div class="col-6"> Price </div>
+
+                            <div class="col-6 text-end"><span class="h4 fw-bold">$ {{product.price}} </span></div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col">
+              
+                        <div class="row p-3">
+              
+                            <div class="col-6">
+              
+                               
+                                <label for="select">Qty</label>
+                                
+                                &nbsp; 
+                               
+                                <select id="select">
+              
+                                    <option value="1">1</option>
+              
+                                    <option value="2">2</option>
+              
+                                    <option value="3">3</option>
+              
+                                    <option value="4">4</option>
+              
+                                </select>
+
+                            </div>
+
+                            <div class="col-6 text-end">
+                                
+                                <button type="button" id="add-button" value="{{product.id}}" class="btn btn-secondary btn-sm">
+                                            <!--the value="{{product.id}} ", ajax send it to server and query database to get our product and update session data accordingly-->
+                                             <!--want to trigger event with ajax with this button, we need id for this button-->
+
+                                Add to cart
+                            
+                                </button> 
+                            
+
+                            </div>
+                        
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <br>
+
+</div>
+
+<script>
+
+    //add button
+    
+    $(document).on('click', '#add-button', function(e){ //This line sets up an event listener that triggers when the element with the ID add-button is clicked.
+
+        e.preventDefault(); //This prevents the default behavior of the button (e.g., submitting a form) from occurring.
+
+        $.ajax({ //An AJAX request is initiated to send data to the server without refreshing the page.
+
+            type: 'POST', //type: 'POST': The request method is set to POST, indicating that data will be sent to the server.
+            url: '{% url "cart-add" %}', //url: '{% url "cart-add" %}': The URL for the AJAX request is dynamically generated using Django's URL template tag, pointing to a view named "cart-add".
+            data: {
+
+                product_id: $('#add-button').val(), //this gets the value of the add button
+                product_quantity: $('#select option:selected').text(), //we need to check the amount we are sending in QTY label using id = "select"
+                csrfmiddlewaretoken: "{{csrf_token}}",  //safety
+                action: 'post'
+            },
+
+            success: function(json){
+                //console.log(json)
+                document.getElementById("cart-qty").textContent = json.qty //
+            }, //later we will return json response and output here in console log from back to front end
+
+            error: function(xhr, errmsg, err){
+
+            }
+        });
+
+    })
+
+</script>
+
+
+
+{% endblock %}

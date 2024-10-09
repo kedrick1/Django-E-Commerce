@@ -1,0 +1,91 @@
+django settings what is staticfiles_dirs for
+
+what is a slug in django
+
+django what is media url and media root
+
+good practice to have templates/store we no namespace issue
+
+django block content html
+
+django should you define templates on the project level or app level
+
+django context processor
+
+what does this line of python mean cart = self.session['session_key'] = {}
+
+django path url what does the name= does
+
+-what does this script do <script>
+
+    $(document).on('click', '#add-button', function(e){
+
+        e.preventDefault();
+
+        $.ajax({
+
+            type: 'POST',
+            url: '{% url "cart-add" %}',
+            data: {
+                product_id: $('#add-button').val(), //this gets the value of the add button
+                product_quantity: $('#select option:selected').text(), //we need to check the amount we are sending in QTY label using id = "select"
+                csrfmiddlewaretoken: "{{csrf_token}}",  //safety
+                action: 'post'
+            },
+            success: function(json){
+
+            }, //later we will return json response and output here in console log from back to front end
+            error: function(xhr, errmsg, err){
+                
+            }
+        });
+
+    })
+
+</script>
+
+-   return sum(item['qty'] for item in self.cart.values())  what does this python line do
+
+-django yield item
+
+-django what does this line do cart[str(product.id)]['product'] = product
+
+-in this code why can we access the email by self.cleaned_data.get('email')
+
+-
+
+
+
+
+
+from django.contrib.sessions.models import Session
+>>> session_k = Session.objects.get(pk='9w8d8l2g8mz7myehaiyjm8y7urjaj1yr')
+>>> session_k.get_decoded()
+{'session_key': {}} shows that there is nothing inside our session key
+
+from django.contrib.sessions.models import Session
+>>> session_k = Session.objects.get(pk='873zyb7nuwec73u5qrbzt9qxn71p66a4') 
+>>> session_k.get_decoded()
+{'session_key': {'fav_number': 13}}###this is after changing the init function of the cart
+
+
+
+###AJAX
+we are going to use it to send a request to the server and then go ahead and retrieve data back without having to refresh the page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TODO
+modify the card layout

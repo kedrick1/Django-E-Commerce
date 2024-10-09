@@ -1,0 +1,226 @@
+{% include "store/base.html" %}
+
+{% load mathfilters %}
+
+{% load static %}
+
+
+{% block content %}
+
+
+<main class="pt-5">
+    
+    <div class="container">
+      
+      <h1 class="h5"> Shopping cart </h1>
+
+	<hr>
+      
+      <!-- LP-->
+      {% for item in cart %}
+      <!--basically the item is a dict with price qty total and product instance as dict value/key, we make the product so no need to do item.product.this-->
+      {% with product=item.product %}
+
+      
+      
+      <br>
+
+      <div class="row mb-4 border product-item">
+        
+        <div class="col-md-3 col-lg-2 order-md-first bg-light">
+        
+            <img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src="{{product.image.url}}"> <!-- Product image -->
+        
+        </div>
+
+        
+        <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
+          
+          <a href="{{product.get_absolute_url}}" class="text-info text-decoration-none"> <!-- Product get absolute url -->
+          
+            <h1 class="h5 pt-2"> {{product.title}} <!-- Product title --> </h1>
+          
+          </a>
+          
+          <div class="border">
+            
+            <div class="col border-bottom">
+              
+                <div class="row p-3">
+              
+                <div class="col-6"> Product </div>
+              
+                <div class="col-6 text-end"><span class="h6 fw-bold">$ {{product.price|mul:item.qty}} </span></div>
+            
+              </div>
+            
+            </div>
+            
+            <div class="col">
+              
+              <div class="row p-3">
+                
+                <div class="col-12">
+                  
+                  <label for="select">Qty</label>
+
+                  &nbsp; 
+                  
+                  <select id="select{{product.id}}"> 
+                  
+                    <option selected>
+                  
+                        {{item.qty}}
+                  
+                    </option>
+                  
+                    <option value="">1</option>
+                  
+                    <option value="">2</option>
+                  
+                    <option value="">3</option>
+                  
+                    <option value="">4</option>
+                  
+                  </select>
+                  
+                  <br> <br>
+
+                  <button type="button" data-index="{{product.id}}"
+                    class="btn btn-primary btn-sm update-button">
+                    Update
+                  
+                  </button>
+                  
+                  &nbsp;
+
+                  <button type="button" data-index="{{product.id}}"
+                    class="btn btn-danger btn-sm delete-button"> <!--also, no need for id easier to work with class, here we cant use value={{product.id }} since dealing with multiples product, we will use data index-->
+                    Delete
+        
+                  </button>
+        
+
+                </div>
+        
+            </div>
+        
+            </div>
+    
+            </div>
+    
+        </div>
+      
+    </div>
+      
+    {% endwith %}
+
+    {% endfor %}
+
+      <div class="col-12 text-end">
+ 
+        <div class="h6 fw-bold"> Sub total: $ <div id="total" class="d-inline-flex"> {{cart.get_total}} </div></div>
+ 
+      </div>
+ 
+
+    </div>
+    
+    <br>
+
+    <br>
+
+
+ </main>
+
+
+
+ <script>
+
+  //delete button
+
+  $(document).on('click', '.delete-button', function(e){ //. is for class and # for id
+
+      e.preventDefault(); //This prevents the default behavior of the button (e.g., submitting a form) from occurring.
+
+      $.ajax({ //An AJAX request is initiated to send data to the server without refreshing the page.
+
+          type: 'POST', //type: 'POST': The request method is set to POST, indicating that data will be sent to the server.
+          url: '{% url "cart-delete" %}', //url: '{% url "cart-add" %}': The URL for the AJAX request is dynamically generated using Django's URL template tag, pointing to a view named "cart-add".
+          data: {
+
+              product_id: $(this).data('index'), //checking which button we are selecting since many of them, impact on what product we delete
+              csrfmiddlewaretoken: "{{csrf_token}}",  //safety
+              action: 'post'
+          },
+
+          success: function(json){ //The primary purpose of the success function is to handle the data returned from the server after a successful AJAX request. This can be any type of data, such as JSON, HTML, or plain text.
+              //console.log(json)
+
+              location.reload(true);
+
+              document.getElementById("cart-qty").textContent = json.qty //will update the cart, this we address the base.html value
+              //we also want to grab the total
+              document.getElementById("total").textContent = json.total //will update the cart, this we address the base.html value
+
+          }, 
+
+          error: function(xhr, errmsg, err){
+
+          }
+      });
+
+  })
+
+</script>
+
+
+
+
+<script>
+
+  //update button, can make javascript file and call from there
+
+  $(document).on('click', '.update-button', function(e){ //. is for class and # for id
+
+      e.preventDefault(); //This prevents the default behavior of the button (e.g., submitting a form) from occurring.
+
+      var theproductid = $(this).data('index'); //capture user quantity selection like 3 or 4
+
+      $.ajax({ //An AJAX request is initiated to send data to the server without refreshing the page.
+
+          type: 'POST', //type: 'POST': The request method is set to POST, indicating that data will be sent to the server.
+          url: '{% url "cart-update" %}', //url: '{% url "cart-add" %}': The URL for the AJAX request is dynamically generated using Django's URL template tag, pointing to a view named "cart-add".
+          data: {
+
+              product_id: $(this).data('index'), 
+              product_quantity: $('#select' + theproductid + ' option:selected').text(),
+              csrfmiddlewaretoken: "{{csrf_token}}",  //safety
+              action: 'post'
+          },
+
+          success: function(json){ //The primary purpose of the success function is to handle the data returned from the server after a successful AJAX request. This can be any type of data, such as JSON, HTML, or plain text.
+              //console.log(json)
+
+              location.reload(true);
+
+              document.getElementById("cart-qty").textContent = json.qty //will update the cart, this we address the base.html value
+              
+              document.getElementById("total").textContent = json.total //will update the cart, this we address the base.html value
+
+          }, 
+
+          error: function(xhr, errmsg, err){
+
+          }
+      });
+
+  })
+
+</script>
+
+
+
+
+{% endblock %}
+
