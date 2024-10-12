@@ -69,14 +69,27 @@ class UpdateUserForm(forms.ModelForm):
 
     password = None #not gonna use it
 
-    def __init__(self, *args, **kwargs):
-        super(UpdateUserForm, self).__init__(*args, **kwargs)
-
-        self.fields['email'].required = True #makes the email field required
-
-
     class Meta:
 
         model = User
         fields = ['username', 'email']
         exclude = ['password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateUserForm, self).__init__(*args, **kwargs)
+
+        self.fields['email'].required = True #makes the email field required
+
+    #email validation
+    def clean_email(self):
+
+        email = self.cleaned_data.get("email")
+
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists(): #allow us to just keep the user email without having an issue, so if user email no exception raised else error
+            raise forms.validationError('Already used email')
+        
+        #extra validation to check email length
+        if len(email) >= 350:
+            raise forms.ValidationError('Your email is too long')
+        
+        return email 

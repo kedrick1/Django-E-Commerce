@@ -161,6 +161,9 @@ def profile_management(request):
     
     #updating our user's username and email
 
+    user_form = UpdateUserForm(instance=request.user) #username verification, says if username is already used, best to put it before
+    #if not there then will not show the validation error
+
     if request.method == 'POST':
 
         user_form = UpdateUserForm(request.POST, instance=request.user) #capture all data, based on instance of the current user
@@ -168,9 +171,9 @@ def profile_management(request):
         if user_form.is_valid():
             user_form.save()
 
-            return redirect('dashboard')
+            return redirect('dashboard') #if no issue go back to dashboard
 
-    user_form = UpdateUserForm(instance=request.user)
+    # user_form = UpdateUserForm(instance=request.user)
 
     context= {'user_form': user_form}
 
