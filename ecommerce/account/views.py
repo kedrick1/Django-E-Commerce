@@ -19,6 +19,10 @@ from .forms import LoginForm , UpdateUserForm #not optimal but for clarity
 from django.contrib.auth.decorators import login_required #decorators
 
 
+
+from django.contrib import messages #django built in messages, where we can invoke it 
+
+
 # Create your views here.
 
 #so basically if user register then we will have all the info and we will create a link in the ver that will itself call the success
@@ -144,8 +148,22 @@ def my_login(request):
 
 def user_logout(request):
 
-    auth.logout(request)
+    auth.logout(request) #clear our session
+    #problem we can have with just this is : make sure clear all sessions except the one of our cart
 
+    ###will omite this code as i dont think it represent a real cart functionality
+
+    # try:
+    #     for key in list(request.session.keys()): #going through all keys
+    #         if key == 'session_key':
+    #             continue
+    #         else:
+    #             del request.session[key]
+    # except KeyError:
+    #     pass
+
+    messages.success(request, "Logout success!") #will show on redirect page, so wherever we redirect thats where you must put the html template for messages
+    
     return redirect("store") #return to home page
 
 #Dashboard
@@ -171,6 +189,9 @@ def profile_management(request):
         if user_form.is_valid():
             user_form.save()
 
+            messages.info(request, "Account updated!")
+
+
             return redirect('dashboard') #if no issue go back to dashboard
 
     # user_form = UpdateUserForm(instance=request.user)
@@ -188,6 +209,8 @@ def delete_account(request):
     if request.method == 'POST':
 
         user.delete()
+
+        messages.error(request, "Account deleted!")
 
         return redirect('store')
     

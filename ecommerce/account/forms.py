@@ -86,7 +86,7 @@ class UpdateUserForm(forms.ModelForm):
         email = self.cleaned_data.get("email")
 
         if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists(): #allow us to just keep the user email without having an issue, so if user email no exception raised else error
-            raise forms.validationError('Already used email')
+            raise forms.ValidationError('Already used email')
         
         #extra validation to check email length
         if len(email) >= 350:

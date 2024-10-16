@@ -117,7 +117,7 @@
 
                     <li class="nav-item">
                 
-                        <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'dashboard' %}"> Dashboard </a>
+                        <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'dashboard' %}"> <i class="fa fa-home" aria-hidden="true"></i> &nbsp; Dashboard </a>
 
                     </li> 
 
@@ -136,7 +136,7 @@
 
                     <li class="nav-item">
                 
-                        <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'user-logout' %}"> Logout </a>
+                        <a class="btn btn-alert navbar-btn text-white" type="button"  href="{% url 'user-logout' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i> &nbsp; Logout </a>
 
                     </li> 
 
@@ -197,6 +197,27 @@
 
     </nav>
 
+    {% for message in messages %}
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} <!--or could be .error .info-->
+
+            <h6 id="message-timer" class="alert alert-success text-center"> <i class="fa fa-sign-out" aria-hidden="true"></i> &nbsp; {{message}} </h6> <!--bootstrap-->
+
+        {% endif %}
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} <!--or could be .error .info-->
+
+            <h6 id="message-timer" class="alert alert-danger text-center"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;  {{message}} </h6> <!--bootstrap-->
+
+        {% endif %}
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %} <!--or could be .error .info-->
+
+            <h6 id="message-timer" class="alert alert-info text-center"> <i class="fa fa-check-circle" aria-hidden="true"></i> &nbsp; {{message}} </h6> <!--bootstrap-->
+
+        {% endif %}
+
+    {% endfor %}
 
     <body>
 
@@ -217,6 +238,8 @@
 
     </body>
 
+<!--add external javascript file-->
+    <script src="{% static 'javascript/app.js' %}"></script>
 
 </html>
 
