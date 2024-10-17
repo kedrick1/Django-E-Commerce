@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 
 from .forms import CreateUserForm
 
+from payment.forms import ShippingForm #for the manage-shipping html , make query on shipping address model and push it with form
+from payment.models import ShippingAddress #same as above
+
 from django.contrib.auth.models import User
 
 #for using the token
@@ -215,3 +218,52 @@ def delete_account(request):
         return redirect('store')
     
     return render(request, 'account/delete-account.html')
+
+
+
+
+
+
+#shipping view 
+@login_required(login_url='my-login')
+def manage_shipping(request):
+    
+    try:
+        #account user with shipment information
+
+        shipping = ShippingAddress.objects.get(user=request.user.id) #get id from active user and compare with the user field to see if has shipping field
+
+    except ShippingAddress.DoesNotExist:
+
+        #account user with no shipment information
+
+        shipping = None 
+
+    form = ShippingForm(instance=shipping) #wheter yes or no, if yes prefield the form with info , else clear form
+
+    if request.method == 'POST':
+
+        form = ShippingForm(request.POST, instance=shipping) #posting to that specific instance
+
+        if form.is_valid():
+
+            # assign the user FK on the object
+
+            shipping_user = form.save(commit=False) 
+
+            #adding foreign key
+            shipping_user.user = request.user
+
+            shipping_user.save()
+
+            return redirect('dashboard')
+    
+    context = {'form': form}
+
+    return render(request, 'account/manage-shipping.html', context=context)
+
+
+
+#we query the database to see if we have an entry for the current user id and if so an instance of the model is created
+#for example wed get a to get page, and then click to update shipping info sending a post request
+
