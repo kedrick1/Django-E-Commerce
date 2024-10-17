@@ -14,6 +14,9 @@ urlpatterns = [
     path('cart/', include('cart.urls')), #all url will start with cart/
     #account app
     path('account/', include('account.urls')),
+    #payment app
+    path('payment/', include('payment.urls')),
+    
 ]
 
 #This setup allows Django to serve media files from the MEDIA_ROOT directory when MEDIA_URL is requested.

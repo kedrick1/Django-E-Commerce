@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'mathfilters', #for math in template
     'account', #django app
     'crispy_forms', #extension for forms
+    'payment', #django app
 
     
 
