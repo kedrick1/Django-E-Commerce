@@ -159,3 +159,7 @@ EMAIL_USE_TLS = 'True'
 
 EMAIL_HOST_USER = 'kedricklavigne@gmail.com' # - your email
 EMAIL_HOST_PASSWORD = 'fewv rswt mfeh nxnq' # - your password
+
+
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups' #for paypal pop up     

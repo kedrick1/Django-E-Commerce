@@ -63,7 +63,7 @@ def complete_order(request):
         cart = Cart(request)
 
         #get total price of items, stored in amount paid in order object
-        total_cost = cart.get_total()
+        total_cost = cart.get_total()   
 
         '''
             Order variations
