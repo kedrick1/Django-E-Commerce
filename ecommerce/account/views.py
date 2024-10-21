@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import CreateUserForm
 
 from payment.forms import ShippingForm #for the manage-shipping html , make query on shipping address model and push it with form
-from payment.models import ShippingAddress #same as above
+from payment.models import ShippingAddress, Order, OrderItem #same as above
 
 from django.contrib.auth.models import User
 
@@ -267,3 +267,18 @@ def manage_shipping(request):
 #we query the database to see if we have an entry for the current user id and if so an instance of the model is created
 #for example wed get a to get page, and then click to update shipping info sending a post request
 
+
+@login_required(login_url='my-login')
+def track_orders(request):
+
+    try:
+
+        orders= OrderItem.objects.filter(user=request.user) #fk 
+
+        context = {'orders': orders}
+        #select order items
+        return render(request, 'acount/track-orders.html', context=context)
+    
+    except:
+
+        return render(request, 'account/track-orders.html')

@@ -143,56 +143,7 @@
 
 
 
-    <!-- Ajax integration -->
 
-    <script>
-
-        //Complete checkout
-    
-        $(document).on('submit', function(e){ //click wouldnt not check those required fields
-
-            e.preventDefault(); 
-
-            $.ajax({ 
-
-                type: 'POST', 
-                url: '{% url "complete-order" %}', 
-                data: {
-
-                    name: $('#name').val(),
-                    email: $('#email').val(),
-
-                    address1: $('#address1').val(),
-                    address2: $('#address2').val(),
-                    city: $('#city').val(),
-
-                    province: $('#province').val(),
-                    zipcode: $('#zip_code').val(),
-                    
-                    
-                    csrfmiddlewaretoken: "{{csrf_token}}",  //safety
-                    action: 'post'
-                },
-
-                success: function(json){
-                   
-
-                    //redirect to 
-                    window.location.replace("{% url 'payment-success' %}")
-                }, 
-
-                error: function(xhr, errmsg, err){
-                    window.location.replace("{% url 'payment-failed' %}")
-
-                }
-            });
-
-        })
-
-    
-
-
-   </script>
 
 
  
@@ -325,6 +276,39 @@
                 const payerName = details.payer.name.given_name;
                 console.log('Transaction completed');
 
+                $.ajax({ 
+
+                type: 'POST', 
+                url: '{% url "complete-order" %}', 
+                data: {
+
+                    name: $('#name').val(),
+                    email: $('#email').val(),
+
+                    address1: $('#address1').val(),
+                    address2: $('#address2').val(),
+                    city: $('#city').val(),
+
+                    province: $('#province').val(),
+                    zipcode: $('#zip_code').val(),
+                    
+                    
+                    csrfmiddlewaretoken: "{{csrf_token}}",  //safety
+                    action: 'post'
+                },
+
+                success: function(json){
+                   
+
+                    //redirect to 
+                    window.location.replace("{% url 'payment-success' %}")
+                }, 
+
+                error: function(xhr, errmsg, err){
+                    window.location.replace("{% url 'payment-failed' %}")
+
+                }
+            });
 
             };
 
